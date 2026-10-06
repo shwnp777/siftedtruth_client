@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import VerseRef from './VerseRef';
 import Figure from './Figure';
 import { splitReferences } from '@/lib/scripture';
-import { VERSIONS, DEFAULT_VERSION } from '@/lib/bible';
+import { VERSIONS, DEFAULT_VERSION } from '@/lib/bible-versions';
 
 const MARKUP = /(\*\*[^*]+\*\*|\*[^*]+\*|\[\^\d+\])/g;
 

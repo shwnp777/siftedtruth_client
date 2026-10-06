@@ -1,6 +1,4 @@
 import { Newsreader, Instrument_Sans } from 'next/font/google';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import './globals.css';
 
 const serif = Newsreader({
@@ -30,14 +28,11 @@ export const viewport = {
   themeColor: '#16202E',
 };
 
+// Header/Footer live in app/(site)/layout.js so the studio gets its own chrome.
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${serif.variable} ${sans.variable}`}>
-      <body>
-        <Header />
-        <main id="main">{children}</main>
-        <Footer />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
