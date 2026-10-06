@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from './lib/supabase/config';
 
 /**
  * Runs only on /studio. Refreshes the Supabase session cookie and sends
@@ -7,8 +8,8 @@ import { createServerClient } from '@supabase/ssr';
  * studio layout and enforced by row-level security in the database.)
  */
 export async function middleware(request) {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const url = SUPABASE_URL;
+  const key = SUPABASE_ANON_KEY;
   if (!url || !key) return NextResponse.next(); // not configured yet: studio shows setup steps
 
   let response = NextResponse.next({ request });

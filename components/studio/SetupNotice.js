@@ -17,7 +17,7 @@ export default function SetupNotice() {
           </li>
           <li>
             Copy <code>.env.example</code> to <code>.env.local</code> and fill in{' '}
-            <code>NEXT_PUBLIC_SUPABASE_URL</code> and <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> from{' '}
+            <code>NEXT_PUBLIC_SUPABASE_URL</code> and <code>NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY</code> from{' '}
             <strong>Project Settings → API</strong>.
           </li>
           <li>

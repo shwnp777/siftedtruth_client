@@ -16,12 +16,12 @@ Requires Node 20 or newer. With no Supabase keys in `.env.local`, the public sit
 
 1. **Create the tables.** Supabase → SQL Editor → New query → paste `supabase/migrations/0001_init.sql` → Run.
 2. **Load the sample posts (optional).** Same again with `supabase/seed.sql`.
-3. **Add your keys.** Supabase → Project Settings → API. Put the Project URL and the `anon` public key into `.env.local`:
+3. **Add your keys.** Supabase → Project Settings → API. Put the Project URL and the **publishable** key (`sb_publishable_…`) into `.env.local`. Older projects show an `anon` key instead; use `NEXT_PUBLIC_SUPABASE_ANON_KEY` for that.
    ```
    NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
+   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
    ```
-   The `service_role` key is **not** needed. Never put it in this app or in the chat.
+   The secret / `service_role` key is **not** needed. Never put it in this app or in the chat.
 4. **Make yourself an admin.** Authentication → Users → Add user (tick *Auto confirm*). Then run `supabase/make-admin.sql` with your email in it.
 5. Restart `npm run dev` and sign in at `/studio`.
 
@@ -69,4 +69,4 @@ Bodies are arrays of blocks (`p`, `h2`, `h3`, `quote`, `list`, `callout`). Inlin
 
 ## Deploying to AWS Amplify
 
-Connect the GitHub repository in Amplify Hosting; it detects Next.js and runs `npm run build`. Add `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` and `NEXT_PUBLIC_SHOW_SAMPLE_BANNER` under App settings → Environment variables.
+Connect the GitHub repository in Amplify Hosting; it detects Next.js and runs `npm run build`. Add `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` and `NEXT_PUBLIC_SHOW_SAMPLE_BANNER` under App settings → Environment variables.
