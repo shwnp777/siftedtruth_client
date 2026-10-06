@@ -1,68 +1,53 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Sifted Truth
 
-## Available Scripts
+Next.js (App Router, plain JavaScript) site for Sifted Truth: Christian apologetics, biblical archaeology and church history.
 
-In the project directory, you can run:
+## Run it
 
-### `npm start`
+```bash
+npm install
+cp .env.example .env.local   # optional
+npm run dev                  # http://localhost:3000
+```
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Requires Node 20 or newer.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Stages
 
-### `npm test`
+1. **Public site with dummy data** ← you are here
+2. Admin studio (`/studio`) with Supabase: create, edit, schedule and correct posts
+3. Reader accounts: saved articles and a personal section
+4. (Later) Bible study tools: interlinear, concordance
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Where things live
 
-### `npm run build`
+| Path | What it is |
+| --- | --- |
+| `app/` | Routes. `articles/`, `dispatches/`, `watch/`, `claims/`, `topics/`, `support/`, `standards/` |
+| `components/` | UI. `RichText` renders post bodies; `VerseRef` is the Scripture hover popover |
+| `lib/content.js` | **The only data layer.** Every page reads through it. Stage 2 swaps its internals for Supabase queries |
+| `lib/scripture.js` | Finds references like "1 Cor 15:3–8" in text and normalizes them (`1CO.15.3-8`) |
+| `lib/bible.js` | Verse lookup. Currently a small hand-entered sample (BSB + KJV) |
+| `data/dummy.js` | Sample posts, topics, authors and sources, shaped like the future tables |
+| `app/globals.css` | Design tokens (colors, type) and all styles |
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Writing post bodies
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+Bodies are arrays of blocks (`p`, `h2`, `h3`, `quote`, `list`, `callout`, `figure`). Inline text supports `*italic*`, `**bold**` and footnote markers `[^1]`. Scripture references in the text are detected automatically and become hover popovers. Nothing to mark up.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Post types
 
-### `npm run eject`
+- **article**: long reads with footnotes, sources, corrections and an author box
+- **dispatch**: short news briefs with a link to the original report
+- **video**: YouTube embed (set `video.youtube_id`), chapters, show notes, transcript
+- **claim**: Claims Examined reviews with a rating (`well_supported`, `debated`, `not_supported`, `insufficient`), a confidence level (`high`, `moderate`, `low`), evidence for/against and a review history
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Before launch
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Replace the sample verses in `lib/bible.js` with the full BSB and KJV imported from their official files, and verify the text.
+- Remove `[Sample]` content and the preview banner (`NEXT_PUBLIC_SHOW_SAMPLE_BANNER=false`).
+- Fill the bracketed placeholders (bio, photo credits, tax-status note on `/support`, error-reporting contact on `/standards`).
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Deploying to AWS Amplify
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Connect the Git repository in Amplify Hosting; it detects Next.js and uses `npm run build`. Add environment variables in the Amplify console, not in the repository.
