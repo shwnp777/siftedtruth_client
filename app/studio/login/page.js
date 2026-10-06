@@ -8,7 +8,7 @@ export const metadata = { title: 'Studio sign in', robots: { index: false } };
 
 export default async function LoginPage({ searchParams }) {
   if (!isSupabaseConfigured) return <SetupNotice />;
-  const { error } = await searchParams;
+  const { error, detail } = await searchParams;
   return (
     <div className="st-login">
       <div className="st-login-art">
@@ -22,7 +22,7 @@ export default async function LoginPage({ searchParams }) {
         </blockquote>
       </div>
       <div className="st-login-form">
-        <LoginForm initialError={error} />
+        <LoginForm initialError={error} detail={detail} />
       </div>
     </div>
   );

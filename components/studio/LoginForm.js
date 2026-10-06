@@ -4,13 +4,20 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/browser';
 
-export default function LoginForm({ initialError }) {
+const MESSAGES = {
+  'not-admin': 'That account isn’t an admin. Run supabase/make-admin.sql with its exact email, then sign in again.',
+  'no-profile':
+    'Signed in, but this account has no profile row. Run supabase/migrations/0001_init.sql again (it backfills profiles), then make-admin.sql.',
+  db: 'Signed in, but the database refused to read your profile. Run supabase/migrations/0002_grants.sql in the SQL Editor, then sign in again.',
+};
+
+export default function LoginForm({ initialError, detail }) {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(
-    initialError === 'not-admin' ? 'That account isn’t an admin. Run supabase/make-admin.sql for it, then sign in again.' : ''
+    initialError ? `${MESSAGES[initialError] ?? 'Sign-in problem.'}${detail ? ` (Database said: ${detail})` : ''}` : ''
   );
 
   const onSubmit = async (e) => {

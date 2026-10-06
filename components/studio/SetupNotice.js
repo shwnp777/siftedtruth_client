@@ -13,7 +13,7 @@ export default function SetupNotice() {
         <ol>
           <li>
             In Supabase, open <strong>SQL Editor</strong>, paste <code>supabase/migrations/0001_init.sql</code> and run
-            it. Then run <code>supabase/seed.sql</code> for the sample posts (optional).
+            it, then <code>0002_grants.sql</code>. Then run <code>supabase/seed.sql</code> for the sample posts (optional).
           </li>
           <li>
             Copy <code>.env.example</code> to <code>.env.local</code> and fill in{' '}
