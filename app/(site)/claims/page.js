@@ -1,14 +1,18 @@
+import { pageMeta } from '@/lib/site';
 import Link from 'next/link';
 import { ClaimCard, RatingBadge, RATINGS } from '@/components/Cards';
+import { notFound } from 'next/navigation';
 import { listPosts } from '@/lib/content';
 
-export const metadata = {
+export const metadata = pageMeta({
   title: 'Claims Examined',
   description: 'Popular claims, from every side, rated against the primary evidence.',
-};
+  path: '/claims',
+});
 
 export default async function ClaimsPage() {
   const claims = await listPosts({ type: 'claim' });
+  if (!claims.length) notFound();
   return (
     <>
       <div className="wrap">

@@ -72,9 +72,27 @@ Bodies are arrays of blocks (`p`, `h2`, `h3`, `quote`, `list`, `callout`). Inlin
 
 ## Before launch
 
-- Delete the `[Sample]` posts and set `NEXT_PUBLIC_SHOW_SAMPLE_BANNER=false`.
-- Fill the bracketed placeholders (bio, photo credits, tax-status note on `/support`, error-reporting contact on `/standards`).
+- Run `supabase/migrations/0004_readers.sql` (newsletter sign-ups and the contact form; both appear in the studio under **Readers**).
+- Run `supabase/content/launch-cleanup.sql` to move the sample posts back to Draft and clear leftover placeholders.
+- Set `NEXT_PUBLIC_SITE_URL` to the live address so share previews and the RSS feed use it.
+
+The public site also guards itself: `[Sample]` posts and videos without a YouTube ID never appear, bracketed placeholders are hidden, and sections with nothing published drop out of the menus.
+
+## Share previews
+
+Every page has a generated 1200 × 630 share image (the `opengraph-image.js` files), used by iMessage, Facebook, LinkedIn, Slack and X:
+
+- **Articles and dispatches:** headline, subtitle, byline and the cover photo.
+- **Claims Examined:** the claim, its rating and its confidence level, plus the cover photo.
+- **Videos:** the YouTube thumbnail with a play button.
+- **Home, topics and section pages:** the masthead.
+
+Layouts live in `lib/og/cards.js`; fonts are in `assets/og-fonts` (OFL). Check a link with any Open Graph previewer once the site is live.
+
+## Giving
+
+`/support` stays hidden until Stripe Checkout is connected and `NEXT_PUBLIC_GIVING_ENABLED=true` is set.
 
 ## Deploying to AWS Amplify
 
-Connect the GitHub repository in Amplify Hosting; it detects Next.js and runs `npm run build`. Add `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` and `NEXT_PUBLIC_SHOW_SAMPLE_BANNER` under App settings → Environment variables.
+Connect the GitHub repository in Amplify Hosting; it detects Next.js and runs `npm run build`. Add `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` and `NEXT_PUBLIC_SITE_URL` (plus `NEXT_PUBLIC_YOUTUBE_URL` once the channel is up) under App settings → Environment variables.

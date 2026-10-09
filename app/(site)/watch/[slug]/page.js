@@ -6,6 +6,7 @@ import { VideoCard } from '@/components/Cards';
 import { Sources } from '@/components/EndMatter';
 import { getPost, getSlugs, getSources, getPassagesForPost, listPosts } from '@/lib/content';
 import { formatDate } from '@/lib/format';
+import { YOUTUBE_URL, pageMeta } from '@/lib/site';
 
 export async function generateStaticParams() {
   return (await getSlugs('video')).map((slug) => ({ slug }));
@@ -14,7 +15,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const post = await getPost('video', slug);
-  return post ? { title: post.title, description: post.dek } : {};
+  if (!post) return {};
+  const meta = pageMeta({ title: post.title, description: post.dek, path: `/watch/${slug}`, type: 'video.other' });
+  meta.openGraph.videos = [{ url: `https://www.youtube.com/embed/${post.video.youtube_id}` }];
+  return meta;
 }
 
 export default async function VideoPage({ params }) {
@@ -35,7 +39,8 @@ export default async function VideoPage({ params }) {
         <div className="wrap" style={{ maxWidth: 1120 }}>
           <VideoPlayer youtubeId={v.youtube_id} title={post.title} />
           <p className="kicker" style={{ color: 'var(--accent)', marginTop: 24 }}>
-            <Link href="/watch">{v.series}</Link> · {v.duration}
+            <Link href="/watch">{v.series || 'Watch'}</Link>
+            {v.duration && ` · ${v.duration}`}
           </p>
           <h1 className="article-title" style={{ fontSize: 42, color: 'var(--on-ink)' }}>
             {post.title}
@@ -93,11 +98,17 @@ export default async function VideoPage({ params }) {
               <p className="label">Also on</p>
               <ul>
                 <li>
-                  <a href="#">YouTube ↗</a>
+                  <a href={`https://www.youtube.com/watch?v=${v.youtube_id}`} target="_blank" rel="noopener noreferrer">
+                    Watch on YouTube ↗
+                  </a>
                 </li>
-                <li>
-                  <a href="#">Podcast ↗</a>
-                </li>
+                {YOUTUBE_URL && (
+                  <li>
+                    <a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer">
+                      Our channel ↗
+                    </a>
+                  </li>
+                )}
               </ul>
             </div>
           </div>

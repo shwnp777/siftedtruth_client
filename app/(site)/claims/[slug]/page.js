@@ -2,10 +2,12 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import RichText, { Inline } from '@/components/RichText';
 import Figure from '@/components/Figure';
-import { RatingBadge, Confidence, ClaimCard } from '@/components/Cards';
+import { RatingBadge, Confidence, ClaimCard, RATINGS } from '@/components/Cards';
 import { Sources, Corrections } from '@/components/EndMatter';
 import { getPost, getSlugs, getSources, getPassagesForPost, listPosts } from '@/lib/content';
 import { formatDate } from '@/lib/format';
+import { pageMeta } from '@/lib/site';
+import { plainText } from '@/lib/plain-text';
 
 export async function generateStaticParams() {
   return (await getSlugs('claim')).map((slug) => ({ slug }));
@@ -14,7 +16,23 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const post = await getPost('claim', slug);
-  return post ? { title: `Claim: ${post.claim.statement}`, description: post.claim.summary } : {};
+  if (!post) return {};
+  const c = post.claim;
+  const rating = RATINGS[c.rating]?.label;
+  const confidence = c.confidence ? `${c.confidence[0].toUpperCase()}${c.confidence.slice(1)} confidence` : null;
+  const verdict = [rating && `Our rating: ${rating}`, confidence].filter(Boolean).join(' · ');
+  return pageMeta({
+    title: c.statement,
+    description: [verdict, plainText(c.summary)].filter(Boolean).join('. '),
+    path: `/claims/${slug}`,
+    type: 'article',
+    article: {
+      publishedTime: post.published_at,
+      modifiedTime: c.reviewed_at || post.updated_at,
+      authors: post.author?.name ? [post.author.name] : undefined,
+      section: 'Claims Examined',
+    },
+  });
 }
 
 export default async function ClaimPage({ params }) {

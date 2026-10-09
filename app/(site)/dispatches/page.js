@@ -1,14 +1,18 @@
+import { pageMeta } from '@/lib/site';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { listPosts, postHref } from '@/lib/content';
 import { formatDate } from '@/lib/format';
 
-export const metadata = {
+export const metadata = pageMeta({
   title: 'Dispatches',
   description: 'Short, sourced briefs on new discoveries, publications and claims in the news.',
-};
+  path: '/dispatches',
+});
 
 export default async function DispatchesPage() {
   const dispatches = await listPosts({ type: 'dispatch' });
+  if (!dispatches.length) notFound();
   return (
     <div className="wrap">
       <header className="page-head">

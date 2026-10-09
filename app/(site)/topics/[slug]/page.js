@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { StoryCard } from '@/components/Cards';
 import { getTopic, getTopics, listPosts, postHref, TYPE_LABELS } from '@/lib/content';
 import { formatDate } from '@/lib/format';
+import { pageMeta } from '@/lib/site';
 
 export async function generateStaticParams() {
   return (await getTopics()).map((t) => ({ slug: t.slug }));
@@ -11,7 +12,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const topic = await getTopic(slug);
-  return topic ? { title: topic.name, description: topic.description } : {};
+  return topic ? pageMeta({ title: topic.name, description: topic.description, path: `/topics/${slug}` }) : {};
 }
 
 export default async function TopicPage({ params }) {
@@ -76,7 +77,9 @@ export default async function TopicPage({ params }) {
         </section>
       )}
 
-      {posts.length === 0 && <p className="meta">Nothing published here yet.</p>}
+      {posts.length === 0 && (
+        <p className="meta">Nothing is filed under {topic.name} right now. Try another topic above.</p>
+      )}
     </div>
   );
 }

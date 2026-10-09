@@ -13,29 +13,43 @@ export default async function HomePage() {
       <h1 className="sr-only">Sifted Truth</h1>
 
       {/* Lead story + latest dispatches */}
-      <section className="wrap lead-grid" aria-label="Top stories">
+      {(lead || dispatches.length > 0) && (
+      <section
+        className="wrap lead-grid"
+        aria-label="Top stories"
+        style={lead && dispatches.length > 0 ? undefined : { gridTemplateColumns: 'minmax(0, 1fr)' }}
+      >
         {lead && (
           <article className="lead-story">
             <Link href={postHref(lead)}>
               <Figure image={lead.hero} ratio="16 / 9" caption={false} priority />
             </Link>
             <p className="kicker">
-              <Link href={`/topics/${lead.topic.slug}`}>{lead.topic.name}</Link> · Long read
+              {lead.topic && <Link href={`/topics/${lead.topic.slug}`}>{lead.topic.name}</Link>}
+              {lead.topic && ' · '}Long read
             </p>
             <h2 className="lead-title">
               <Link href={postHref(lead)}>{lead.title}</Link>
             </h2>
             <p className="lead-dek">{lead.dek}</p>
             <p className="meta">
-              By {lead.author.name}
-              <span className="meta-sep">·</span>
-              {lead.reading_minutes} min read
-              <span className="meta-sep">·</span>
-              {lead.source_ids.length} sources
+              {[
+                lead.author?.name && `By ${lead.author.name}`,
+                lead.reading_minutes && `${lead.reading_minutes} min read`,
+                lead.source_ids.length > 0 && `${lead.source_ids.length} sources`,
+              ]
+                .filter(Boolean)
+                .map((part, i) => (
+                  <span key={part}>
+                    {i > 0 && <span className="meta-sep">·</span>}
+                    {part}
+                  </span>
+                ))}
             </p>
           </article>
         )}
 
+        {dispatches.length > 0 && (
         <aside className="dispatch-rail" aria-labelledby="dispatches-h">
           <h2 id="dispatches-h" className="label">
             Latest Dispatches
@@ -56,7 +70,9 @@ export default async function HomePage() {
             All dispatches →
           </Link>
         </aside>
+        )}
       </section>
+      )}
 
       {/* More reading */}
       {articles.length > 0 && (
@@ -75,6 +91,7 @@ export default async function HomePage() {
       )}
 
       {/* Watch */}
+      {videos.length > 0 && (
       <section className="band band-ink" aria-labelledby="watch-h">
         <div className="wrap">
           <div className="section-head">
@@ -92,6 +109,7 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* Topics */}
       <section className="band" aria-labelledby="topics-h">
@@ -111,6 +129,7 @@ export default async function HomePage() {
       </section>
 
       {/* Claims Examined */}
+      {claims.length > 0 && (
       <section className="band band-paper" aria-labelledby="claims-h">
         <div className="wrap">
           <p className="kicker" style={{ marginBottom: 6 }}>
@@ -145,6 +164,7 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* Newsletter */}
       <section id="newsletter" className="wrap newsletter" aria-labelledby="newsletter-h">

@@ -1,11 +1,16 @@
+import { notFound } from 'next/navigation';
 import SupportForm from '@/components/SupportForm';
+import { GIVING_ENABLED, pageMeta } from '@/lib/site';
 
-export const metadata = {
+export const metadata = pageMeta({
   title: 'Support our work',
   description: 'Sifted Truth is reader-supported. Help keep careful, sourced work free for everyone.',
-};
+  path: '/support',
+});
 
 export default function SupportPage() {
+  // Hidden until Stripe is connected (NEXT_PUBLIC_GIVING_ENABLED=true).
+  if (!GIVING_ENABLED) notFound();
   return (
     <div className="wrap">
       <header className="page-head" style={{ borderBottom: 0, marginBottom: 16 }}>
@@ -27,8 +32,8 @@ export default function SupportPage() {
           </ul>
           <h2>A note on giving</h2>
           <p>
-            [Confirm with your accountant: if Sifted Truth is not a registered nonprofit, say clearly here that gifts are
-            not tax-deductible.]
+            Sifted Truth is published by Sudden North, LLC. It is not a registered charity, so gifts are not
+            tax-deductible.
           </p>
         </div>
         <SupportForm />

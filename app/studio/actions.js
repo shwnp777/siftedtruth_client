@@ -237,3 +237,12 @@ export async function signOut() {
   await supabase.auth.signOut();
   redirect('/studio/login');
 }
+
+/* ---------- Readers: messages ---------- */
+
+export async function setMessageHandled(id, handled) {
+  const admin = await adminOrNull();
+  if (!admin) return;
+  await admin.supabase.from('messages').update({ handled }).eq('id', id);
+  revalidatePath('/studio/readers');
+}

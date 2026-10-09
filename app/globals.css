@@ -182,14 +182,6 @@ button {
 
 /* ---------- Sample banner ---------- */
 
-.sample-banner {
-  background: var(--accent);
-  color: var(--ink);
-  font-size: 13px;
-  text-align: center;
-  padding: 6px 16px;
-  font-weight: 500;
-}
 
 /* ---------- Header ---------- */
 
@@ -1598,5 +1590,88 @@ button {
   }
   .verse-pop {
     animation: none;
+  }
+}
+
+/* ---------- Forms: spam trap + contact ---------- */
+
+.hp-field {
+  position: absolute !important;
+  left: -10000px !important;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.contact-form {
+  display: grid;
+  gap: 18px;
+  max-width: 640px;
+}
+.contact-form label {
+  display: grid;
+  gap: 6px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+.contact-form label .hint {
+  font-weight: 400;
+  color: var(--muted);
+}
+.contact-form .input,
+.contact-form textarea,
+.contact-form select {
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 400;
+  padding: 12px 14px;
+  background: var(--paper-3);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  color: var(--text);
+}
+.contact-form textarea {
+  min-height: 180px;
+  resize: vertical;
+  line-height: 1.5;
+}
+.contact-form .row-2 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+}
+.contact-form .status {
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0;
+}
+.contact-form .status.error {
+  color: var(--rating-not);
+}
+.contact-done {
+  max-width: 640px;
+  padding: 28px 32px;
+  border-left: 3px solid var(--accent);
+  background: var(--paper-3);
+}
+.contact-done h2 {
+  margin: 0 0 8px;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 26px;
+}
+.contact-done p {
+  margin: 0;
+  color: var(--text-2);
+}
+@media (max-width: 640px) {
+  .contact-form .row-2 {
+    grid-template-columns: 1fr;
   }
 }

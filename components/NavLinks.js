@@ -5,16 +5,17 @@ import { usePathname } from 'next/navigation';
 
 /**
  * The site menu: Dispatches, then every topic marked "show in menu" (in the
- * order set in the studio), then Claims Examined and Watch.
+ * order set in the studio), then Claims Examined and Watch. Sections with
+ * nothing published yet are left out.
  */
-export default function NavLinks({ topics = [] }) {
+export default function NavLinks({ topics = [], sections = {} }) {
   const pathname = usePathname();
   const items = [
-    { href: '/dispatches', label: 'Dispatches' },
+    sections.dispatches !== false && { href: '/dispatches', label: 'Dispatches' },
     ...topics.filter((t) => t.show_in_nav !== false).map((t) => ({ href: `/topics/${t.slug}`, label: t.name })),
-    { href: '/claims', label: 'Claims Examined' },
-    { href: '/watch', label: 'Watch' },
-  ];
+    sections.claims !== false && { href: '/claims', label: 'Claims Examined' },
+    sections.videos !== false && { href: '/watch', label: 'Watch' },
+  ].filter(Boolean);
   return (
     <ul>
       {items.map((item) => {

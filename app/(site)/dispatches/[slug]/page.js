@@ -5,6 +5,7 @@ import Figure from '@/components/Figure';
 import { Sources, Corrections } from '@/components/EndMatter';
 import { getPost, getSlugs, getSources, getPassagesForPost, listPosts, postHref } from '@/lib/content';
 import { formatDate } from '@/lib/format';
+import { pageMeta } from '@/lib/site';
 
 export async function generateStaticParams() {
   return (await getSlugs('dispatch')).map((slug) => ({ slug }));
@@ -13,7 +14,19 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const post = await getPost('dispatch', slug);
-  return post ? { title: post.title, description: post.dek } : {};
+  if (!post) return {};
+  return pageMeta({
+    title: post.title,
+    description: post.dek,
+    path: `/dispatches/${slug}`,
+    type: 'article',
+    article: {
+      publishedTime: post.published_at,
+      modifiedTime: post.updated_at,
+      authors: post.author?.name ? [post.author.name] : undefined,
+      section: post.dispatch?.label || post.topic?.name,
+    },
+  });
 }
 
 export default async function DispatchPage({ params }) {

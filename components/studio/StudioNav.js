@@ -53,6 +53,11 @@ export default function StudioNav() {
         <Icon name="tag" />
         Topics
       </Link>
+      <span className="st-nav-label">Audience</span>
+      <Link href="/studio/readers" aria-current={pathname.startsWith('/studio/readers') ? 'page' : undefined}>
+        <Icon name="mail" />
+        Readers
+      </Link>
       <Link href="/" target="_blank">
         <Icon name="external" />
         View site

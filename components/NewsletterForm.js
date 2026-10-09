@@ -1,35 +1,36 @@
 'use client';
 
-import { useState } from 'react';
+import { useActionState } from 'react';
+import { subscribe } from '@/app/(site)/actions';
 
 export default function NewsletterForm() {
-  const [done, setDone] = useState(false);
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    // Stage 2+: send to your newsletter provider (or a Supabase table) here.
-    setDone(true);
-  };
+  const [state, action, pending] = useActionState(subscribe, null);
+  const done = state?.ok;
 
   return (
-    <form onSubmit={onSubmit}>
+    <form action={action}>
       <label htmlFor="newsletter-email" className="sr-only">
         Email address
       </label>
       <input
         id="newsletter-email"
+        name="email"
         className="input"
         type="email"
         required
-        placeholder="you@example.com"
+        placeholder="Your email address"
         autoComplete="email"
         disabled={done}
       />
-      <button type="submit" className="btn" disabled={done}>
-        {done ? 'Subscribed' : 'Subscribe'}
+      {/* Hidden from people; bots fill it in. */}
+      <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hp-field" />
+      <button type="submit" className="btn" disabled={done || pending}>
+        {done ? 'Subscribed' : pending ? 'Subscribing…' : 'Subscribe'}
       </button>
       <p className="form-note" role="status">
-        {done ? 'Thanks! (Preview build: signups connect in a later stage.)' : 'One letter a week. Unsubscribe anytime.'}
+        {done
+          ? 'You’re on the list. Look for The Weekly Sift in your inbox.'
+          : state?.message || 'One letter a week. Unsubscribe anytime.'}
       </p>
     </form>
   );

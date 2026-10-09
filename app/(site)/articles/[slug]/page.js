@@ -6,6 +6,7 @@ import { StoryCard } from '@/components/Cards';
 import { Notes, Sources, Corrections, AuthorBox } from '@/components/EndMatter';
 import { getPost, getSlugs, getSources, getPassagesForPost, listPosts } from '@/lib/content';
 import { formatDate } from '@/lib/format';
+import { pageMeta } from '@/lib/site';
 
 export async function generateStaticParams() {
   return (await getSlugs('article')).map((slug) => ({ slug }));
@@ -14,7 +15,19 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const post = await getPost('article', slug);
-  return post ? { title: post.title, description: post.dek } : {};
+  if (!post) return {};
+  return pageMeta({
+    title: post.title,
+    description: post.dek,
+    path: `/articles/${slug}`,
+    type: 'article',
+    article: {
+      publishedTime: post.published_at,
+      modifiedTime: post.updated_at,
+      authors: post.author?.name ? [post.author.name] : undefined,
+      section: post.topic?.name,
+    },
+  });
 }
 
 export default async function ArticlePage({ params }) {
@@ -52,10 +65,18 @@ export default async function ArticlePage({ params }) {
                 <span>Updated {formatDate(post.updated_at, { short: true })}</span>
               </>
             )}
-            <span className="meta-sep">·</span>
-            <span>{post.reading_minutes} min read</span>
-            <span className="meta-sep">·</span>
-            <a href="#sources-h">{sources.length} sources</a>
+            {post.reading_minutes && (
+              <>
+                <span className="meta-sep">·</span>
+                <span>{post.reading_minutes} min read</span>
+              </>
+            )}
+            {sources.length > 0 && (
+              <>
+                <span className="meta-sep">·</span>
+                <a href="#sources-h">{sources.length} sources</a>
+              </>
+            )}
           </div>
         </div>
         <div className="article-hero">
@@ -76,6 +97,7 @@ export default async function ArticlePage({ params }) {
 
         <aside className="article-aside" aria-label="About this article">
           <div className="aside-sticky">
+            {sources.length > 0 && (
             <div className="aside-block">
               <p className="label">Sourcing</p>
               <div className="aside-stat">{sources.length}</div>
@@ -86,6 +108,7 @@ export default async function ArticlePage({ params }) {
                 View sources
               </a>
             </div>
+            )}
             {verseLabels.length > 0 && (
               <div className="aside-block">
                 <p className="label">Scripture in this article</p>

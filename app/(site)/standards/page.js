@@ -1,9 +1,12 @@
+import { pageMeta } from '@/lib/site';
+import Link from 'next/link';
 import { RatingBadge, Confidence } from '@/components/Cards';
 
-export const metadata = {
+export const metadata = pageMeta({
   title: 'Our standards',
   description: 'How Sifted Truth sources its work, rates claims and corrects mistakes.',
-};
+  path: '/standards',
+});
 
 const RATING_TEXT = {
   well_supported: 'The best available evidence clearly supports the claim, and specialists broadly agree.',
@@ -61,7 +64,11 @@ export default function StandardsPage() {
                 page they affect. When new evidence changes a Claims Examined rating, we update the rating and record the
                 change in its review history.
               </p>
-              <p>[Add how readers can report an error, e.g. an email address or contact form.]</p>
+              <p>
+                Spotted an error, or have evidence we missed?{' '}
+                <Link href="/contact?topic=correction">Tell us here</Link>. Every report is read, and if it holds up we
+                correct the page and note the change at the bottom of it.
+              </p>
             </div>
           </section>
         </div>

@@ -1,15 +1,19 @@
+import { pageMeta } from '@/lib/site';
 import { VideoCard } from '@/components/Cards';
+import { notFound } from 'next/navigation';
 import { listPosts } from '@/lib/content';
 
 const slugify = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
-export const metadata = {
+export const metadata = pageMeta({
   title: 'Watch',
   description: 'On-site tours, claims examined and conversations with scholars.',
-};
+  path: '/watch',
+});
 
 export default async function WatchPage() {
   const videos = await listPosts({ type: 'video' });
+  if (!videos.length) notFound();
   const series = [...new Set(videos.map((v) => v.video.series))];
 
   return (
