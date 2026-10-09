@@ -1,8 +1,8 @@
 import Image from 'next/image';
 
 /**
- * Image with caption. Until real media lives in S3/CloudFront, posts have
- * `src: null` and render a labelled placeholder of the same proportions.
+ * Image with caption and credit (linked to its source when `credit_url` is set).
+ * Posts without an image render a labelled placeholder of the same proportions.
  */
 export default function Figure({
   image,
@@ -24,6 +24,9 @@ export default function Figure({
             fill
             priority={priority}
             sizes="(max-width: 900px) 100vw, 1080px"
+            // Remote images (Wikimedia now, any URL pasted in the studio) load
+            // straight from their host; local /public images are optimized.
+            unoptimized={/^https?:\/\//.test(image.src)}
             style={{ objectFit: 'cover' }}
           />
         ) : (
@@ -36,7 +39,14 @@ export default function Figure({
       {caption && image.caption && (
         <figcaption>
           {image.caption}
-          {image.credit && <span className="credit">{image.credit}</span>}
+          {image.credit &&
+            (image.credit_url ? (
+              <a className="credit" href={image.credit_url} target="_blank" rel="noopener noreferrer">
+                {image.credit}
+              </a>
+            ) : (
+              <span className="credit">{image.credit}</span>
+            ))}
         </figcaption>
       )}
     </figure>

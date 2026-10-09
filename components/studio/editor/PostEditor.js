@@ -666,6 +666,17 @@ export default function PostEditor({ initial, topics, authors, sources: initialS
                     onChange={(e) => patchIn('hero', { credit: e.target.value })}
                   />
                 </label>
+                <label className="st-field">
+                  <span>
+                    Credit link <span className="st-hint">e.g. the Wikimedia file page</span>
+                  </span>
+                  <input
+                    className="st-input"
+                    value={post.hero?.credit_url ?? ''}
+                    onChange={(e) => patchIn('hero', { credit_url: e.target.value })}
+                    placeholder="https://"
+                  />
+                </label>
               </div>
             )}
 

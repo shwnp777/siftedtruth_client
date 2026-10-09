@@ -49,6 +49,7 @@ export const claims = [
   /* ---------------------------------------------------------------- */
   {
     slug: 'jesus-never-existed',
+    photo: 'tacitus',
     topic: 'apologetics',
     title: 'Jesus never existed.',
     dek: 'Was Jesus of Nazareth a real person? Here is what ancient sources, friendly and hostile, actually say.',
@@ -97,6 +98,7 @@ export const claims = [
   /* ---------------------------------------------------------------- */
   {
     slug: 'gospels-written-centuries-after-jesus',
+    photo: 'papyrus6',
     topic: 'bible-manuscripts',
     title: 'The Gospels were written centuries after Jesus.',
     dek: 'When were Matthew, Mark, Luke and John really written? The evidence points to the first century, and possibly earlier than most think.',
@@ -139,6 +141,7 @@ export const claims = [
   /* ---------------------------------------------------------------- */
   {
     slug: 'isaiah-53-written-after-jesus',
+    photo: 'isaiah53',
     topic: 'bible-manuscripts',
     title: 'Isaiah 53 was written after Jesus to fit him.',
     dek: 'Could Christians have written the “suffering servant” passage after the fact? A scroll from the Dead Sea answers that.',
@@ -173,6 +176,7 @@ export const claims = [
   /* ---------------------------------------------------------------- */
   {
     slug: 'king-david-was-a-legend',
+    photo: 'qeiyafa',
     topic: 'archaeology',
     title: 'King David is a legend with no evidence.',
     dek: 'For years some scholars doubted David existed. Then a broken stone turned up at Tel Dan.',
@@ -212,6 +216,7 @@ export const claims = [
   /* ---------------------------------------------------------------- */
   {
     slug: 'scientists-have-found-noahs-ark',
+    photo: 'ararat',
     topic: 'archaeology',
     title: 'Scientists have found Noah’s Ark.',
     dek: 'New radar scans and soil samples at Turkey’s Durupınar formation have revived the question. What do we actually know?',
@@ -260,6 +265,7 @@ export const claims = [
   /* ---------------------------------------------------------------- */
   {
     slug: 'jerichos-walls-fell-as-joshua-describes',
+    photo: 'jericho',
     topic: 'archaeology',
     title: 'Jericho’s walls fell just as Joshua describes.',
     dek: 'Jericho’s walls really did collapse. The fight is over when.',
@@ -301,6 +307,7 @@ export const claims = [
   /* ---------------------------------------------------------------- */
   {
     slug: 'jesus-fulfilled-hundreds-of-prophecies',
+    photo: 'michelangeloIsaiah',
     topic: 'apologetics',
     title: 'Jesus fulfilled hundreds of specific prophecies.',
     dek: 'Some of the Old Testament’s links to Jesus are specific predictions. Many more are patterns and echoes. Both are worth seeing clearly.',
@@ -339,6 +346,7 @@ export const claims = [
   /* ---------------------------------------------------------------- */
   {
     slug: 'nicaea-chose-the-books-of-the-bible',
+    photo: 'nicaeaDamaskinos',
     topic: 'church-history',
     title: 'The Council of Nicaea decided which books belong in the Bible.',
     dek: 'A popular claim, checked against the council’s own records. What the bishops actually decided matters more than the myth.',

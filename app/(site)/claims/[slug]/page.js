@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import RichText, { Inline } from '@/components/RichText';
+import Figure from '@/components/Figure';
 import { RatingBadge, Confidence, ClaimCard } from '@/components/Cards';
 import { Sources, Corrections } from '@/components/EndMatter';
 import { getPost, getSlugs, getSources, getPassagesForPost, listPosts } from '@/lib/content';
@@ -68,6 +69,12 @@ export default async function ClaimPage({ params }) {
             </Link>
           </div>
         </header>
+
+        {post.hero?.src && (
+          <div style={{ maxWidth: 900, margin: '36px auto 0' }}>
+            <Figure image={post.hero} ratio="21 / 9" />
+          </div>
+        )}
 
         <div style={{ maxWidth: 900, margin: '0 auto', paddingBottom: 72 }}>
           <div className="endmatter">

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import RichText from '@/components/RichText';
+import Figure from '@/components/Figure';
 import { Sources, Corrections } from '@/components/EndMatter';
 import { getPost, getSlugs, getSources, getPassagesForPost, listPosts, postHref } from '@/lib/content';
 import { formatDate } from '@/lib/format';
@@ -45,6 +46,12 @@ export default async function DispatchPage({ params }) {
             <time dateTime={post.published_at}>{formatDate(post.published_at)}</time>
           </div>
         </header>
+
+        {post.hero?.src && (
+          <div style={{ marginTop: 28 }}>
+            <Figure image={post.hero} ratio="3 / 2" />
+          </div>
+        )}
 
         <div style={{ marginTop: 32 }}>
           <RichText blocks={post.body} passages={passages} dropcap={false} />
