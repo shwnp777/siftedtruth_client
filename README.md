@@ -15,7 +15,7 @@ Requires Node 20 or newer. With no Supabase keys in `.env.local`, the public sit
 ## Connect Supabase (one time)
 
 1. **Create the tables.** Supabase → SQL Editor → New query → paste `supabase/migrations/0001_init.sql` → Run.
-   Then run `supabase/migrations/0002_grants.sql` the same way (newer Supabase projects need it).
+   Then run `supabase/migrations/0002_grants.sql` and `0003_topic_menu.sql` the same way.
 2. **Load the sample posts (optional).** Same again with `supabase/seed.sql`.
 3. **Add your keys.** Supabase → Project Settings → API. Put the Project URL and the **publishable** key (`sb_publishable_…`) into `.env.local`. Older projects show an `anon` key instead; use `NEXT_PUBLIC_SUPABASE_ANON_KEY` for that.
    ```

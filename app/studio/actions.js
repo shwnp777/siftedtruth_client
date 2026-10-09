@@ -165,6 +165,63 @@ export async function deleteSource(id) {
 }
 
 /* ------------------------------------------------------------------------ */
+/* Topics                                                                    */
+/* ------------------------------------------------------------------------ */
+
+export async function saveTopic(input) {
+  const auth = await adminOrNull();
+  if (!auth) return NOT_ALLOWED;
+  const name = clean(input.name);
+  if (!name) return { error: 'A topic needs a name.' };
+  const slug = slugify(input.slug || name);
+  const row = { name, slug, description: clean(input.description) || null };
+  // show_in_nav exists once migration 0003 has run; send it only when it is a real boolean.
+  if (typeof input.show_in_nav === 'boolean') row.show_in_nav = input.show_in_nav;
+
+  let result;
+  if (input.id) {
+    result = await auth.supabase.from('topics').update(row).eq('id', input.id).select().single();
+  } else {
+    const { data: last } = await auth.supabase.from('topics').select('sort').order('sort', { ascending: false }).limit(1);
+    result = await auth.supabase
+      .from('topics')
+      .insert({ ...row, sort: (last?.[0]?.sort ?? 0) + 1 })
+      .select()
+      .single();
+  }
+  if (result.error) {
+    if (result.error.code === '23505') return { error: `Another topic already uses the address /topics/${slug}.` };
+    if (/show_in_nav/.test(result.error.message)) return { error: 'Run supabase/migrations/0003_topic_menu.sql first, then try again.' };
+    return { error: result.error.message };
+  }
+  revalidatePath('/', 'layout');
+  return { ok: true, topic: result.data };
+}
+
+/** Save a new order: ids from first to last. */
+export async function reorderTopics(ids) {
+  const auth = await adminOrNull();
+  if (!auth) return NOT_ALLOWED;
+  for (let i = 0; i < ids.length; i++) {
+    const { error } = await auth.supabase.from('topics').update({ sort: i + 1 }).eq('id', ids[i]);
+    if (error) return { error: error.message };
+  }
+  revalidatePath('/', 'layout');
+  return { ok: true };
+}
+
+export async function deleteTopic(id) {
+  const auth = await adminOrNull();
+  if (!auth) return NOT_ALLOWED;
+  const { count } = await auth.supabase.from('posts').select('id', { count: 'exact', head: true }).eq('topic_id', id);
+  if (count) return { error: `This topic still has ${count} post${count === 1 ? '' : 's'}. Move them to another topic first.` };
+  const { error } = await auth.supabase.from('topics').delete().eq('id', id);
+  if (error) return { error: error.message };
+  revalidatePath('/', 'layout');
+  return { ok: true };
+}
+
+/* ------------------------------------------------------------------------ */
 /* Misc                                                                      */
 /* ------------------------------------------------------------------------ */
 

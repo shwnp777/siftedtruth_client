@@ -2,8 +2,10 @@ import Link from 'next/link';
 import { LogoMark } from './Logo';
 import NavLinks from './NavLinks';
 import TodayDate from './TodayDate';
+import { getTopics } from '@/lib/content';
 
-export default function Header() {
+export default async function Header() {
+  const topics = await getTopics().catch(() => []);
   const showBanner = process.env.NEXT_PUBLIC_SHOW_SAMPLE_BANNER !== 'false';
   return (
     <header>
@@ -30,7 +32,7 @@ export default function Header() {
         <p className="masthead-tagline">Faith, history and the evidence beneath both</p>
       </div>
       <nav className="wrap site-nav" aria-label="Sections">
-        <NavLinks />
+        <NavLinks topics={topics} />
       </nav>
     </header>
   );

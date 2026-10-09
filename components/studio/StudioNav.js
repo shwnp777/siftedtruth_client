@@ -49,6 +49,10 @@ export default function StudioNav() {
         <Icon name="sources" />
         Sources
       </Link>
+      <Link href="/studio/topics" aria-current={pathname.startsWith('/studio/topics') ? 'page' : undefined}>
+        <Icon name="tag" />
+        Topics
+      </Link>
       <Link href="/" target="_blank">
         <Icon name="external" />
         View site
