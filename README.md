@@ -51,6 +51,14 @@ Security lives in the database: row-level security lets anyone read live posts a
 | `supabase/` | SQL: schema + security, seed data, make-admin |
 | `middleware.js` | Keeps the studio session fresh and sends signed-out visitors to the login page |
 
+## Load the full Bible (one time)
+
+```bash
+npm run import:bible
+```
+
+Downloads the Berean Standard Bible ([bereanbible.com](https://bereanbible.com/bsb.txt)) and the King James Version ([scrollmapper/bible_databases](https://github.com/scrollmapper/bible_databases)), asks for your studio admin email and password, and writes about 31,100 verses per version into the `verses` table. Safe to re-run. Every Scripture popover on the site then reads from the database.
+
 ## Publishing
 
 - **Statuses:** Draft (private), Scheduled (goes live at its publish time), Published, Archived (taken down, kept).
@@ -64,7 +72,6 @@ Bodies are arrays of blocks (`p`, `h2`, `h3`, `quote`, `list`, `callout`). Inlin
 
 ## Before launch
 
-- Import the full BSB and KJV into the `verses` table from their official files (the sample in `lib/bible.js` is hand-entered and only covers the demo passages).
 - Delete the `[Sample]` posts and set `NEXT_PUBLIC_SHOW_SAMPLE_BANNER=false`.
 - Fill the bracketed placeholders (bio, photo credits, tax-status note on `/support`, error-reporting contact on `/standards`).
 
