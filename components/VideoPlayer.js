@@ -5,7 +5,7 @@ import PlayDot from './PlayDot';
 
 /**
  * Lightweight YouTube embed: shows a cover until clicked, then loads the
- * privacy-enhanced player. Without a youtube_id it shows a "coming soon" cover.
+ * privacy-enhanced player. (Videos without a youtube_id never reach the public site.)
  */
 export default function VideoPlayer({ youtubeId, title }) {
   const [playing, setPlaying] = useState(false);
@@ -30,7 +30,7 @@ export default function VideoPlayer({ youtubeId, title }) {
         className="player-cover"
         onClick={() => setPlaying(true)}
         disabled={!youtubeId}
-        aria-label={youtubeId ? `Play video: ${title}` : 'Video not yet published'}
+        aria-label={`Play video: ${title}`}
         style={
           youtubeId
             ? {
@@ -42,7 +42,6 @@ export default function VideoPlayer({ youtubeId, title }) {
         }
       >
         <PlayDot size={24} />
-        {!youtubeId && <span style={{ fontSize: 13, letterSpacing: '0.06em' }}>[Add a YouTube ID to publish this video]</span>}
       </button>
     </div>
   );

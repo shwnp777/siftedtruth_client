@@ -58,11 +58,11 @@ export function VideoCard({ post }) {
   return (
     <Link href={postHref(post)} className="video-card">
       <div className="video-thumb">
-        <Figure image={{ src: post.video.thumbnail ?? null, alt: post.title }} dark caption={false} label={false}>
+        <Figure image={{ src: post.video.thumbnail ?? null, alt: post.title }} dark caption={false}>
           <span style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <PlayDot />
           </span>
-          <span className="duration">{post.video.duration}</span>
+          {post.video.duration && <span className="duration">{post.video.duration}</span>}
         </Figure>
       </div>
       <p className="series">{post.video.series}</p>
@@ -78,7 +78,12 @@ export function ClaimCard({ post }) {
       <span className="statement">{post.claim.statement}</span>
       <Confidence level={post.claim.confidence} />
       <span className="meta">
-        {post.source_ids.length} sources reviewed · Updated {formatDate(post.claim.reviewed_at, { short: true })}
+        {[
+          post.source_ids.length > 0 && `${post.source_ids.length} sources reviewed`,
+          post.claim.reviewed_at && `Updated ${formatDate(post.claim.reviewed_at, { short: true })}`,
+        ]
+          .filter(Boolean)
+          .join(' · ')}
       </span>
     </Link>
   );

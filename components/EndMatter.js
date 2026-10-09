@@ -81,8 +81,8 @@ export function AuthorBox({ author }) {
         </span>
         <div>
           <div className="name">{author.name}</div>
-          <div className="meta">{author.role}</div>
-          <p>{author.bio}</p>
+          {author.role && <div className="meta">{author.role}</div>}
+          {author.bio && <p>{author.bio}</p>}
         </div>
       </div>
     </section>

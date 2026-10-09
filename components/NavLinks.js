@@ -3,21 +3,22 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-export const NAV = [
-  { href: '/dispatches', label: 'Dispatches' },
-  { href: '/topics/apologetics', label: 'Apologetics' },
-  { href: '/topics/archaeology', label: 'Archaeology' },
-  { href: '/topics/church-history', label: 'Church History' },
-  { href: '/topics/bible-manuscripts', label: 'Bible & Manuscripts' },
-  { href: '/claims', label: 'Claims Examined' },
-  { href: '/watch', label: 'Watch' },
-];
-
-export default function NavLinks() {
+/**
+ * The site menu: Dispatches, then every topic marked "show in menu" (in the
+ * order set in the studio), then Claims Examined and Watch. Sections with
+ * nothing published yet are left out.
+ */
+export default function NavLinks({ topics = [], sections = {} }) {
   const pathname = usePathname();
+  const items = [
+    sections.dispatches !== false && { href: '/dispatches', label: 'Dispatches' },
+    ...topics.filter((t) => t.show_in_nav !== false).map((t) => ({ href: `/topics/${t.slug}`, label: t.name })),
+    sections.claims !== false && { href: '/claims', label: 'Claims Examined' },
+    sections.videos !== false && { href: '/watch', label: 'Watch' },
+  ].filter(Boolean);
   return (
     <ul>
-      {NAV.map((item) => {
+      {items.map((item) => {
         const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
         return (
           <li key={item.href}>
